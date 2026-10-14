@@ -1,0 +1,84 @@
+DIFFERENCE BETWEEN res.send() AND res.json()?
+1. res.send("text") sends text/html.
+2. res.json({...}) sends application/json.
+3. res.send({...}) with an object behaves like res.json.
+4. Chrome’s Pretty-print checkbox appears for JSON responses. The server sends compact JSON, and the viewer formats it.
+5. app.set("json spaces", 2) makes the server send formatted JSON (dev only).
+6. Only one response per request, otherwise you get “Cannot set headers after they are sent”.
+
+// ============================================
+// WHEN TO USE DYNAMIC PARAMS vs QUERY PARAMS
+// ============================================
+
+// DYNAMIC PARAM (req.params)
+// Use it when you want ONE specific item.
+// Think: "I know exactly which item I want."
+//
+//   GET    /users/42       -> get user 42
+//   PUT    /users/42       -> update user 42
+//   DELETE /posts/7        -> delete post 7
+//   GET    /users/42/posts -> posts of user 42
+
+// QUERY PARAM (req.query)
+// Use it when you want to FILTER or CHANGE a list.
+// Think: "I want many items, but I want to narrow them down."
+//
+//   GET /users?role=admin        -> only admins
+//   GET /products?search=shoes   -> search for shoes
+//   GET /products?page=2         -> page 2
+//   GET /products?sort=price     -> sort by price
+
+// QUICK TEST
+// One specific item   -> dynamic param
+// A list with filters -> query param
+
+// BOTH TOGETHER
+//   GET /users/42/posts?page=2
+//   42     -> which user (req.params)
+//   page=2 -> which page of their posts (req.query)
+
+// ============================================
+// EXAMPLE CODE
+// ============================================
+
+import express from "express";
+
+const app = express();
+
+const users = [
+  { id: 1, name: "Amjad", role: "admin" },
+  { id: 2, name: "Rahul", role: "user" },
+  { id: 3, name: "Sara", role: "user" },
+];
+
+// QUERY PARAM: list with optional filter
+// GET /users
+// GET /users?role=admin
+app.get("/users", (req, res) => {
+  const { role } = req.query;
+  const result = role ? users.filter((u) => u.role === role) : users;
+  res.json(result);
+});
+
+// DYNAMIC PARAM: one specific user
+// GET /users/2
+app.get("/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const user = users.find((u) => u.id === id);
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.json(user);
+});
+
+// BOTH TOGETHER
+// GET /users/2/posts?page=1
+app.get("/users/:id/posts", (req, res) => {
+  const { id } = req.params;
+  const { page = 1 } = req.query;
+  res.json({ userId: id, page: Number(page) });
+});
+
+app.listen(3000, () => console.log("Server running on port 3000"));

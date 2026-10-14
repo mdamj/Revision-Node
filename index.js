@@ -3,7 +3,8 @@ import demoRoutes from "./Routes/Demo.js";
 import {getUsers,getUserById,addUser} from "./Model/Something.js";
 const app = express();
 app.use(express.json());
-//this is get request it comes from a model file in which we have a users array and we export getUsers function to all the user from the user array
+//this is get request it comes from a model file in which we have a users array and we export getUsers function to all the user from the user array and
+// we use res.json(beacause we want to send the data in json format) and we use res.send to send the data in html format.
 app.get("/users",(req,res)=>{
     res.json(getUsers());
 });
@@ -67,17 +68,20 @@ app.get("/", (req, res) => {
 });
 //This is a Query Params
 app.get("/:id",(req,res)=>{
-    const {id,role}=req.query;
+    //why we req.query beacuse we are getting the data from the url and we use req.query to get the data from the url.
+    const {id,role}=req.params;
     res.send(`Your id is ${id} and your role is ${role}`);
 
 });
 // So in Query Params we can send multiple params in the url but in Dynamic Params we can send only one param in the url.
 //in Query Params we can send params in the url like this http://localhost:3000/123?role=admin but in 
 // Dynamic Params we can send params in the url like this http://localhost:3000/123
+//what is the difference between 
 
 //This is a Dynamic Params
 
 app.get("/:id", (req, res) => {
+    //
     const {id}= req.params;
     res.send(`Your id is ${id}`);
 });
