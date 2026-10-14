@@ -48,7 +48,7 @@ app.get("/users", (req, res) => {
    res.send(`
         <h1>Users</h1>
         <ul>${items}</ul> 
-    `);
+     <a href="/users">All the users</a>`);
 });
 app.get("/users/:id",(req,res)=>{
     const id=Number(req.params.id);
