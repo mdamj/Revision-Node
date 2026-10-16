@@ -1,0 +1,7 @@
+What is MongoDB?
+It is a NOSQL database that uses a document oriented data model. It stores data in flexible, JSON-like documents, which allows for easy storage and retrieval of complex data structures. 
+MongoDB is designed to handle large volumes of data and provides high performance, scalability, and availability. It is commonly used in modern web applications and big data solutions.
+If there is SQL then what is the purpose of NoSQL databases like MongoDB?
+NoSQL databases like MongoDB serve a different purpose compared to traditional SQL databases. While SQL databases are based on a structured schema and use tables to store data,
+ NoSQL databases are designed to handle unstructured or semi-structured data, allowing for more flexibility in data modeling. 
+ In MongoDB we don't have a Schema and we have fewer data Schema.

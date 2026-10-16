@@ -6,6 +6,7 @@ const users=[
     {id:2,name:"Zehar",role:"Bhoot"},
 ];
 app.get("/users",(req,res)=>{
+
 // List page: each user links to edit page.
   const items = users
     .map((u) => `<li>${u.name} (${u.role}) <a href="/users/${u.id}/edit">Edit</a></li>`)
@@ -15,7 +16,7 @@ app.get("/users",(req,res)=>{
 });
 
 // 1. Show the edit form, pre-filled with current data
-app.get("/users/edit", (req, res) => {
+app.get("/users/:id/edit", (req, res) => {
   const user = users.find((u) => u.id === Number(req.params.id));
   if (!user) return res.status(404).send("<h1>User not found</h1>");
 
@@ -29,6 +30,15 @@ app.get("/users/edit", (req, res) => {
     <a href="/users">Cancel</a>
   `);
 });
+app.get("/users/:id/delete",(req,res)=>{
+    const user=users.find((u)=>u.id===Number(req.params.id));
+    res.send(`
+        <h1>Delete</h2>
+        <input name="name" value="${user.name}"/>
+        <input name="role" value="${user.role}"/>
+        <button type="submit">Save</button>
+        `)
+})
 
 // 2. Save the changes
 app.post("/users/:id/edit", (req, res) => {
@@ -41,6 +51,7 @@ app.post("/users/:id/edit", (req, res) => {
 
   res.redirect("/users"); // go back to the list
 });
+
 
 app.listen(3000, () => console.log("Server running on port 3000"));
 //This is page of edit user and we use get request to get the data of that user and then we use post request to update the data of that user and then we use redirect to go back to the list of users.
